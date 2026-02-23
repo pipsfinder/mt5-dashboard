@@ -1,11 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Pipsfinder</title>
+<meta charset="UTF-8">
+<title>MT5 Live Trading</title>
+
+<style>
+
+body{
+background:#0c0f14;
+color:#d1d4dc;
+font-family:Segoe UI;
+}
+
+.header{
+display:flex;
+gap:20px;
+padding:10px;
+background:#111827;
+}
+
+.box{
+padding:10px;
+background:#1a1f2b;
+border-radius:4px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#111827;
+text-align:left;
+padding:8px;
+}
+
+td{
+padding:8px;
+border-bottom:1px solid #1f2937;
+}
+
+.buy{
+color:#3b82f6;
+}
+
+.sell{
+color:#ef4444;
+}
+
+.profit{
+color:#22c55e;
+}
+
+.loss{
+color:#ef4444;
+}
+
+</style>
+
 </head>
+
 <body>
-  <h1>Welcome to Pipsfinder</h1>
-  <p>Your free Forex indicator download website.</p>
+
+<h2>MetaTrader 5 Live Trading</h2>
+
+<div class="header">
+
+<div class="box">
+Balance: <span id="balance"></span>
+</div>
+
+<div class="box">
+Equity: <span id="equity"></span>
+</div>
+
+<div class="box">
+Margin: <span id="margin"></span>
+</div>
+
+<div class="box">
+Free Margin: <span id="free_margin"></span>
+</div>
+
+<div class="box">
+Profit: <span id="profit"></span>
+</div>
+
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Type</th>
+<th>Volume</th>
+<th>Open</th>
+<th>SL</th>
+<th>TP</th>
+<th>Current</th>
+<th>Profit</th>
+</tr>
+</thead>
+
+<tbody id="trades"></tbody>
+
+</table>
+
+<script>
+
+async function loadTrades(){
+
+const res = await fetch("trades.json?"+Date.now());
+
+const data = await res.json();
+
+document.getElementById("balance").innerText=data.balance;
+document.getElementById("equity").innerText=data.equity;
+document.getElementById("margin").innerText=data.margin;
+document.getElementById("free_margin").innerText=data.free_margin;
+document.getElementById("profit").innerText=data.profit;
+
+let html="";
+
+data.trades.forEach(t=>{
+
+let typeClass=t.type=="BUY"?"buy":"sell";
+let profitClass=t.profit>=0?"profit":"loss";
+
+html+=`
+<tr>
+<td>${t.symbol}</td>
+<td class="${typeClass}">${t.type}</td>
+<td>${t.lot}</td>
+<td>${t.open}</td>
+<td>${t.sl}</td>
+<td>${t.tp}</td>
+<td>${t.current}</td>
+<td class="${profitClass}">${t.profit}</td>
+</tr>
+`;
+
+});
+
+document.getElementById("trades").innerHTML=html;
+
+}
+
+loadTrades();
+
+setInterval(loadTrades,1000);
+
+</script>
+
 </body>
 </html>

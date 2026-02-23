@@ -1,0 +1,19 @@
+{
+  "balance": 1000,
+  "equity": 1012,
+  "profit": 12,
+  "margin": 50,
+  "free_margin": 962,
+  "trades": [
+    {
+      "symbol": "EURUSD",
+      "type": "BUY",
+      "lot": 0.10,
+      "open": 1.0850,
+      "sl": 1.0800,
+      "tp": 1.0900,
+      "current": 1.0862,
+      "profit": 12
+    }
+  ]
+}
